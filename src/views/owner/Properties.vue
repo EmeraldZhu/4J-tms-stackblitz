@@ -160,10 +160,10 @@
           </StepperPanel>
 
           <!-- Step 3 -->
-          <StepperPanel header="Add Unit">
+          <StepperPanel header="Add Unit Details">
             <template #content="{ prevCallback, nextCallback }">
               <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
-                <div class="text-center mt-3 mb-3 text-xl font-semibold">Add Unit</div>
+                <div class="text-center mt-3 mb-3 text-xl font-semibold">Add Unit Details</div>
                 <div class="field p-fluid">
 
                 </div>
