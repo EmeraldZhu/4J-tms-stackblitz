@@ -111,7 +111,7 @@
               </div>
             <div class="flex pt-4 justify-content-between">
               <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
-              <Button label="Submit" icon="pi pi-send" @click="submit" :disabled="isSubmitting" />
+              <Button label="Submit" icon="pi pi-send" @click="submitProperty" :disabled="isSubmitting" />
             </div>
             </template>
           </StepperPanel>
@@ -299,7 +299,7 @@ const onFileSelected = (event) => {
   toast.add({severity: 'success', summary: 'File Selected', detail: 'Your file has been selected successfully.', life: 3000});
 };
 
-const submit = async () => {
+const submitProperty = async () => {
   if (isSubmitting.value) {
     // Prevent submission if already submitting
     return;
