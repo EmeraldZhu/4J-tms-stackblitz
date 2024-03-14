@@ -182,7 +182,7 @@
                     <InputIcon>
                       <i class="pi pi-building" />
                     </InputIcon>
-                    <InputText type="text" placeholder="Enter property name" />
+                    <Dropdown v-model="propertyName" editable :options="propertyNames" placeholder="Choose property" />
                   </IconField>
                 </div>
               </div>
@@ -203,7 +203,7 @@
                     <InputIcon>
                       <i class="pi pi-building" />
                     </InputIcon>
-                    <InputText type="text" placeholder="Enter unit name" />
+                    <Dropdown v-model="unitName" editable :options="unitNames" optionLabel="name" placeholder="Choose unit name" />
                   </IconField>
                   <br>
                   <div class="text-start mt-3 mb-3">Unit Type</div>
@@ -211,7 +211,7 @@
                     <InputIcon>
                       <i class="pi pi-database" />
                     </InputIcon>
-                    <InputText type="text" placeholder="Choose unit type" />
+                    <Dropdown v-model="unitType" editable :options="unitTypes" optionLabel="type" placeholder="Choose unit type" />
                   </IconField>
                   <br>
                   <div class="text-start mt-3 mb-3">Rent Price</div>
@@ -249,6 +249,7 @@ import FileUpload from 'primevue/fileupload';
 import Button from 'primevue/button';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Dropdown from 'primevue/dropdown';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
