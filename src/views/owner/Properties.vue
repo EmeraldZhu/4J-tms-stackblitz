@@ -120,6 +120,7 @@
     </StepperPanel>
     <StepperPanel header="Unit Types">
       <div class="form">
+        <Toast />
         <h1>Specify Unit Types</h1>
         <!-- Unit type form starts here -->
         <Stepper orientation="vertical">
@@ -169,6 +170,7 @@
     </StepperPanel>
     <StepperPanel header="Unit Creation">
       <div class="form">
+        <Toast />
         <h1>Add Units to Property</h1>
         <!-- Unit form starts here -->
         <Stepper orientation="vertical">
@@ -381,22 +383,50 @@ const submitProperty = async () => {
   }
 };
 
-// Define the reactive state
+// Reactive state for storing unit types
 const unitType = ref('');
 const unitTypes = reactive([]);
 
-// Define the methods
+// Function to add a unit type
 const addUnitType = () => {
-  // Check if the unitType is not empty
   if (unitType.value.trim() !== '') {
-    // Add the unitType to the unitTypes array
-    unitTypes.push({ type: unitType.value });
+    // Check if the user is signed in
+    if (user && user.uid) {
+      unitTypes.push({ 
+        type: unitType.value, 
+        createdBy: user.uid // Add the landlord's UID to each unit type
+      });
 
-    // Clear the unitType input field for the next entry
-    unitType.value = '';
+      unitType.value = ''; // Clear the input field for the next entry
+      toast.add({ severity: 'success', summary: 'Unit Type Added Locally', detail: 'The unit type has been added to the list.', life: 3000 });
+    } else {
+      // Handle case where no user is signed in
+      toast.add({ severity: 'error', summary: 'User Not Signed In', detail: 'You must be signed in to add unit types.', life: 3000 });
+    }
   } else {
-    // Show an error message if the unitType is empty
-    console.error('Unit type cannot be empty');
+    toast.add({ severity: 'warn', summary: 'Empty Field', detail: 'Unit type cannot be empty.', life: 3000 });
+  }
+};
+
+const submitUnitTypes = async () => {
+  if (unitTypes.length === 0) {
+    toast.add({ severity: 'warn', summary: 'No Unit Types', detail: 'Please add at least one unit type before submitting.', life: 3000 });
+    return;
+  }
+
+  try {
+    // Submit each unit type in the unitTypes array to Firestore
+    for (const unitType of unitTypes) {
+      await addDoc(collection(db, 'unitTypes'), unitType);
+    }
+    
+    toast.add({ severity: 'success', summary: 'Unit Types Submitted', detail: 'All unit types have been successfully submitted.', life: 3000 });
+    
+    // Clear the unitTypes array after successful submission
+    unitTypes.splice(0, unitTypes.length);
+  } catch (error) {
+    console.error('Error submitting unit types to Firestore:', error);
+    toast.add({ severity: 'error', summary: 'Submission Error', detail: 'Error submitting unit types. Please try again.', life: 3000 });
   }
 };
 </script>
