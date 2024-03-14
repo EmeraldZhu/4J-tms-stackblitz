@@ -200,6 +200,14 @@
                     <InputText type="text" placeholder="Enter unit name" />
                   </IconField>
                   <br>
+                  <div class="text-start mt-3 mb-3">Unit Type</div>
+                  <IconField>
+                    <InputIcon>
+                      <i class="pi pi-database" />
+                    </InputIcon>
+                    <InputText type="text" placeholder="Choose unit type" />
+                  </IconField>
+                  <br>
                   <div class="text-start mt-3 mb-3">Rent Price</div>
                   <IconField>
                     <InputIcon>
