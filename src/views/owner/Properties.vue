@@ -160,10 +160,10 @@
           </StepperPanel>
 
           <!-- Step 3 -->
-          <StepperPanel header="Add Units">
+          <StepperPanel header="Add Unit">
             <template #content="{ prevCallback, nextCallback }">
               <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
-                <div class="text-center mt-3 mb-3 text-xl font-semibold">Add Units</div>
+                <div class="text-center mt-3 mb-3 text-xl font-semibold">Add Unit</div>
                 <div class="field p-fluid">
 
                 </div>
@@ -179,14 +179,14 @@
           <StepperPanel header="Submit">
             <template #content="{ prevCallback }">
               <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
-                <div class="text-center mt-3 mb-3 text-xl font-semibold">Post Units</div>
+                <div class="text-center mt-3 mb-3 text-xl font-semibold">Post Unit</div>
                 <div class="field p-fluid">
                   
                 </div>
               </div>
               <div class="flex pt-4 justify-content-between">
                 <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
-                <Button label="Add Unit" icon="pi pi-send" @click="submit" />
+                <Button label="Add Unit" icon="pi pi-plus-circle" @click="submit" />
               </div>
             </template>
           </StepperPanel>
