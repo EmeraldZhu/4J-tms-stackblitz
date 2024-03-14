@@ -58,7 +58,7 @@
               <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
                 <div class="text-center mt-3 mb-3 text-xl font-semibold">Unit Names</div>
                 <div class="field p-fluid">
-                  <InputText v-model="property.unitNames" type="text" placeholder="Enter unit names" />
+                  <InputText v-model="property.unitNames" type="text" placeholder="Enter unit names, e.g. A1, 101 ..." />
                 </div>
               </div>
               <div class="flex pt-4 justify-content-between">
@@ -186,7 +186,7 @@
               </div>
               <div class="flex pt-4 justify-content-between">
                 <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
-                <Button label="Submit" icon="pi pi-send" @click="submit" />
+                <Button label="Add Unit" icon="pi pi-send" @click="submit" />
               </div>
             </template>
           </StepperPanel>
