@@ -133,8 +133,14 @@
                     <InputIcon>
                       <i class="pi pi-building" />
                     </InputIcon>
-                    <InputText type="text" placeholder="Enter unit type" />
+                    <InputText v-model="unitType" type="text" placeholder="Enter unit type" />
                   </IconField>
+                  <br>
+                  <Button label="Add Unit Type" @click="addUnitType"/>
+                  <br><br>
+                  <DataTable :value="unitTypes" stripedRows>
+                    <Column field="type" header="Unit Type"></Column>
+                  </DataTable>
                 </div>
               </div>
               <div class="flex pt-4 justify-content-end">
@@ -230,7 +236,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import Stepper from 'primevue/stepper';
@@ -241,6 +247,8 @@ import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import FileUpload from 'primevue/fileupload';
 import Button from 'primevue/button';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -369,6 +377,25 @@ const submit = async () => {
   // Handle the case where no user is signed in
   console.error("No user signed in");
   toast.add({severity: 'error', summary: 'Authentication Error', detail: 'No user signed in.', life: 3000});
+  }
+};
+
+// Define the reactive state
+const unitType = ref('');
+const unitTypes = reactive([]);
+
+// Define the methods
+const addUnitType = () => {
+  // Check if the unitType is not empty
+  if (unitType.value.trim() !== '') {
+    // Add the unitType to the unitTypes array
+    unitTypes.push({ type: unitType.value });
+
+    // Clear the unitType input field for the next entry
+    unitType.value = '';
+  } else {
+    // Show an error message if the unitType is empty
+    console.error('Unit type cannot be empty');
   }
 };
 </script>
