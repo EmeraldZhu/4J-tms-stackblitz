@@ -118,6 +118,49 @@
         </Stepper>
       </div>
     </StepperPanel>
+    <StepperPanel header="Unit Types">
+      <div class="form">
+        <h1>Specify Unit Types</h1>
+        <!-- Unit type form starts here -->
+        <Stepper orientation="vertical">
+          <!-- Step 1 -->
+          <StepperPanel header="Set Unit Types">
+            <template #content="{ nextCallback }">
+              <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
+                <div class="text-center mt-3 mb-3 text-xl font-semibold">Set Unit Types</div>
+                <div class="field p-fluid">
+                  <IconField>
+                    <InputIcon>
+                      <i class="pi pi-building" />
+                    </InputIcon>
+                    <InputText type="text" placeholder="Enter unit type" />
+                  </IconField>
+                </div>
+              </div>
+              <div class="flex pt-4 justify-content-end">
+                <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" />
+              </div>
+            </template>
+          </StepperPanel>
+
+          <!-- Submit Button -->
+          <StepperPanel header="Submit">
+            <template #content="{ prevCallback }">
+              <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
+                <div class="text-center mt-3 mb-3 text-xl font-semibold">Submit Unit Types</div>
+                <div class="field p-fluid">
+                  
+                </div>
+              </div>
+              <div class="flex pt-4 justify-content-between">
+                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
+                <Button label="Submit" icon="pi pi-send" @click="submitUnitTypes" />
+              </div>
+            </template>
+          </StepperPanel>
+        </Stepper>
+      </div>
+    </StepperPanel>
     <StepperPanel header="Unit Creation">
       <div class="form">
         <h1>Add Units to Property</h1>
@@ -144,49 +187,31 @@
           </StepperPanel>
 
           <!-- Step 2 -->
-          <StepperPanel header="Unit Type">
-            <template #content="{ prevCallback, nextCallback }">
-              <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
-                <div class="text-center mt-3 mb-3 text-xl font-semibold">Set Unit Type & Price</div>
-                <div class="field p-fluid">
-
-                </div>
-              </div>
-              <div class="flex pt-4 justify-content-between">
-                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
-                <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" />
-              </div>
-            </template>
-          </StepperPanel>
-
-          <!-- Step 3 -->
           <StepperPanel header="Add Unit Details">
             <template #content="{ prevCallback, nextCallback }">
               <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
                 <div class="text-center mt-3 mb-3 text-xl font-semibold">Add Unit Details</div>
                 <div class="field p-fluid">
-
+                  <div class="text-start mt-3 mb-3">Unit Name</div>
+                  <IconField>
+                    <InputIcon>
+                      <i class="pi pi-building" />
+                    </InputIcon>
+                    <InputText type="text" placeholder="Enter unit name" />
+                  </IconField>
+                  <br>
+                  <div class="text-start mt-3 mb-3">Rent Price</div>
+                  <IconField>
+                    <InputIcon>
+                      <i class="pi pi-dollar" />
+                    </InputIcon>
+                    <InputText type="text" placeholder="Rent price" />
+                  </IconField>
                 </div>
               </div>
               <div class="flex pt-4 justify-content-between">
                 <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
-                <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" />
-              </div>
-            </template>
-          </StepperPanel>
-
-          <!-- Submit Button -->
-          <StepperPanel header="Submit">
-            <template #content="{ prevCallback }">
-              <div class="flex flex-column gap-2 mx-auto" style="min-height: 16rem; max-width: 20rem">
-                <div class="text-center mt-3 mb-3 text-xl font-semibold">Post Unit</div>
-                <div class="field p-fluid">
-                  
-                </div>
-              </div>
-              <div class="flex pt-4 justify-content-between">
-                <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
-                <Button label="Add Unit" icon="pi pi-plus-circle" @click="submit" />
+                <Button label="Add Unit" icon="pi pi-plus-circle" @click="addUnit" />
               </div>
             </template>
           </StepperPanel>
