@@ -184,7 +184,7 @@
                     <InputIcon>
                       <i class="pi pi-building" />
                     </InputIcon>
-                    <Dropdown v-model="propertyName" editable :options="propertyNames" placeholder="Choose property" />
+                    <Dropdown v-model="propertyName" editable :options="propertyNames" optionLabel="label" placeholder="Choose property" />
                   </IconField>
                 </div>
               </div>
@@ -205,7 +205,7 @@
                     <InputIcon>
                       <i class="pi pi-building" />
                     </InputIcon>
-                    <Dropdown v-model="unitName" editable :options="unitNames" optionLabel="name" placeholder="Choose unit name" />
+                    <Dropdown v-model="propertyUnitName" editable :options="unitNames" optionLabel="label" placeholder="Choose unit name" />
                   </IconField>
                   <br>
                   <div class="text-start mt-3 mb-3">Unit Type</div>
@@ -213,7 +213,7 @@
                     <InputIcon>
                       <i class="pi pi-database" />
                     </InputIcon>
-                    <Dropdown v-model="unitType" editable :options="unitTypes" optionLabel="type" placeholder="Choose unit type" />
+                    <Dropdown v-model="unitType" editable :options="unitTypes" optionLabel="label" placeholder="Choose unit type" />
                   </IconField>
                   <br>
                   <div class="text-start mt-3 mb-3">Rent Price</div>
@@ -221,13 +221,13 @@
                     <InputIcon>
                       <i class="pi pi-dollar" />
                     </InputIcon>
-                    <InputText type="text" placeholder="Rent price" />
+                    <InputText type="text" v-model="rentPrice" placeholder="Rent price" />
                   </IconField>
                 </div>
               </div>
               <div class="flex pt-4 justify-content-between">
                 <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="prevCallback" />
-                <Button label="Add Unit" icon="pi pi-plus-circle" @click="addUnit" />
+                <Button label="Add Unit" icon="pi pi-plus-circle" @click="addUnit" :disabled="isSubmitting" />
               </div>
             </template>
           </StepperPanel>
@@ -238,7 +238,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { onMounted, ref, reactive, watch } from 'vue';
 import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 import Stepper from 'primevue/stepper';
@@ -253,7 +253,7 @@ import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Dropdown from 'primevue/dropdown';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const auth = getAuth();
@@ -342,6 +342,7 @@ const submitProperty = async () => {
     unitNames: property.value.unitNames,
     address: property.value.address,
     media: mediaUrl,
+    createdBy: user.uid,
     // Add other fields as needed
   };
 
@@ -427,6 +428,71 @@ const submitUnitTypes = async () => {
   } catch (error) {
     console.error('Error submitting unit types to Firestore:', error);
     toast.add({ severity: 'error', summary: 'Submission Error', detail: 'Error submitting unit types. Please try again.', life: 3000 });
+  }
+};
+
+const landlordId = user ? user.uid : null;
+
+const propertyUnitName = ref('');
+const propertyName = ref('');
+const propertyNames = ref([]);
+const unitNames = ref([]);
+const rentPrice = ref('');
+
+// Fetch properties on component mount
+onMounted(async () => {
+  if (!user) return;
+  const landlordId = user.uid;
+  const propertiesQuery = query(collection(db, 'properties'), where('createdBy', '==', landlordId));
+  const querySnapshot = await getDocs(propertiesQuery);
+  propertyNames.value = querySnapshot.docs.map(doc => ({
+    label: doc.data().name,
+    value: doc.id
+  }));
+});
+
+// Watch for changes in propertyName to fetch property unit names
+watch(propertyName, async (newVal) => {
+  if (!newVal) return;
+  const propertyDoc = await getDocs(collection(db, 'properties'), where('id', '==', newVal));
+  if (!propertyDoc.empty) {
+    const propertyData = propertyDoc.docs[0].data();
+    unitNames.value = propertyData.unitNames.split(',').map(name => ({ label: name.trim(), value: name.trim() }));
+  }
+});
+
+// Fetch unit types on component mount
+onMounted(async () => {
+  if (!user) return;
+  const landlordId = user.uid;
+  const unitTypesQuery = query(collection(db, 'unitTypes'), where('createdBy', '==', landlordId));
+  const querySnapshot = await getDocs(unitTypesQuery);
+  unitTypes.splice(0, unitTypes.length, ...querySnapshot.docs.map(doc => ({ label: doc.data().type, value: doc.id })));
+});
+
+const addUnit = async () => {
+  if (isSubmitting.value) return;
+  isSubmitting.value = true;
+
+  try {
+    await addDoc(collection(db, 'units'), {
+      propertyName: propertyName.value,
+      propertyUnitName: propertyUnitName.value,
+      unitType: unitType.value,
+      rentPrice: rentPrice.value,
+      createdBy: user.uid,
+    });
+
+    toast.add({ severity: 'success', summary: 'Unit Added', detail: 'The unit has been successfully added.', life: 3000 });
+    // Reset fields after successful submission
+    propertyUnitName.value = '';
+    unitType.value = '';
+    rentPrice.value = '';
+  } catch (error) {
+    console.error('Error adding unit:', error);
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to add the unit. Please try again.', life: 3000 });
+  } finally {
+    isSubmitting.value = false;
   }
 };
 </script>
